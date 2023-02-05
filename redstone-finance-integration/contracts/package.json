@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "dashboard" : "npx truffle dashboard",
+    "deploy": "npx hardhat run ./scripts/deploy.ts --network dashboard"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,7 @@
     "hardhat": "^2.12.6"
   },
   "dependencies": {
-    "@redstone-finance/evm-connector": "^0.0.18"
+    "@redstone-finance/evm-connector": "^0.0.18",
+    "truffle": "^5.7.5"
   }
 }
