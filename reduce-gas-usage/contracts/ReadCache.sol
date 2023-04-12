@@ -12,7 +12,7 @@ contract ReadCacheBad {
 contract ReadCacheGood {
     uint256 length = 10;
 
-    function loop() {
+    function loop() public {
         uint256 localLength = length;
 
         for (uint256 i = 0; i < localLength; i++) {}

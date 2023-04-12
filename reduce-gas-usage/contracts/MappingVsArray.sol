@@ -4,7 +4,7 @@ pragma solidity 0.8.18;
 contract MappingVsArrayBad {
     address[] private allowedUsers;
 
-    function findIndex(address user) returns (int256) {
+    function findIndex(address user) private view returns (int256) {
         for (uint256 i = 0; i < allowedUsers.length; i++) {
             if (allowedUsers[i] == user) {
                 return int256(i);
@@ -23,8 +23,8 @@ contract MappingVsArrayBad {
     function disallowUser(address user) public {
         int256 index = findIndex(user);
         if (index != -1) {
-            allowedUsers[index] = allowedUsers[allowedUsers.length - 1];
-            allowedUsers.length--;
+            allowedUsers[uint256(index)] = allowedUsers[allowedUsers.length - 1];
+            allowedUsers.pop();
         }
     }
 
