@@ -13,6 +13,7 @@ contract StructDataBad {
         _carData[msg.sender] = Car(brand, hp);
     }
 
+    // 26259 gas
     function getCarHp() public returns (uint256) {
         Car memory myCar = _carData[msg.sender];
         return myCar.hp;
@@ -31,6 +32,7 @@ contract StructDataGood {
         _carData[msg.sender] = Car(brand, hp);
     }
 
+    // 23596 gas
     function getCarHp() public returns (uint256) {
         return _carData[msg.sender].hp;
     }

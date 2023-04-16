@@ -1,5 +1,3 @@
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -126,18 +124,18 @@ describe("Reduce Gas Usage", function () {
   });
 
   it("StorageSlots", async function () {
-    const FactoryBad = await ethers.getContractFactory("StorageSlotsBad");
-    const FactoryGood = await ethers.getContractFactory("StorageSlotsGood");
+    const FactoryBad = await ethers.getContractFactory("UseOfConstantBad");
+    const FactoryGood = await ethers.getContractFactory("UseOfConstantGood");
 
-    const estimatedGasBad = await ethers.provider.estimateGas({
-      data: FactoryBad.interface.encodeDeploy([1, 2, 3]),
-    });
+    const input = [1, 2, 3, 4, 5];
 
-    const estimatedGasGood = await ethers.provider.estimateGas({
-      data: FactoryGood.interface.encodeDeploy([1, 2, 3]),
-    });
+    const deployedBad = await FactoryBad.deploy(input);
+    const deployedGood = await FactoryGood.deploy(input);
 
-    compare(estimatedGasBad, estimatedGasGood);
+    const badCost = (await deployedBad.deployTransaction.wait()).gasUsed;
+    const goodCost = (await deployedGood.deployTransaction.wait()).gasUsed;
+
+    compare(badCost, goodCost);
   });
 
   it("StructData", async function () {
@@ -177,20 +175,33 @@ describe("Reduce Gas Usage", function () {
     const FactoryBad = await ethers.getContractFactory("UseOfConstantBad");
     const FactoryGood = await ethers.getContractFactory("UseOfConstantGood");
 
-    const estimatedGasBad = await ethers.provider.estimateGas({
-      data: FactoryBad.interface.encodeDeploy(),
-    });
+    const input = 123;
 
-    const estimatedGasGood = await ethers.provider.estimateGas({
-      data: FactoryGood.interface.encodeDeploy(),
-    });
+    const deployedBad = await FactoryBad.deploy(input);
+    const deployedGood = await FactoryGood.deploy(input);
 
-    compare(estimatedGasBad, estimatedGasGood);
+    const badCost = (await deployedBad.deployTransaction.wait()).gasUsed;
+    const goodCost = (await deployedGood.deployTransaction.wait()).gasUsed;
+
+    compare(badCost, goodCost);
   });
 
   it("SingleWrite", async function () {
     const FactoryBad = await ethers.getContractFactory("SingleWriteBad");
     const FactoryGood = await ethers.getContractFactory("SingleWriteGood");
+
+    const deployedBad = await FactoryBad.deploy();
+    const deployedGood = await FactoryGood.deploy();
+
+    const badCost = await deployedBad.estimateGas.loop();
+    const goodCost = await deployedGood.estimateGas.loop();
+
+    compare(badCost, goodCost);
+  });
+
+  it("Loops", async function () {
+    const FactoryBad = await ethers.getContractFactory("LoopsBad");
+    const FactoryGood = await ethers.getContractFactory("LoopsGood");
 
     const deployedBad = await FactoryBad.deploy();
     const deployedGood = await FactoryGood.deploy();

@@ -20,10 +20,13 @@ contract MappingVsArrayBad {
         }
     }
 
+    // 43780 gas
     function disallowUser(address user) public {
         int256 index = findIndex(user);
         if (index != -1) {
-            allowedUsers[uint256(index)] = allowedUsers[allowedUsers.length - 1];
+            allowedUsers[uint256(index)] = allowedUsers[
+                allowedUsers.length - 1
+            ];
             allowedUsers.pop();
         }
     }
@@ -40,6 +43,7 @@ contract MappingVsArrayGood {
         allowedUsers[user] = true;
     }
 
+    // 27082 gas
     function disallowUser(address user) public {
         allowedUsers[user] = false;
     }

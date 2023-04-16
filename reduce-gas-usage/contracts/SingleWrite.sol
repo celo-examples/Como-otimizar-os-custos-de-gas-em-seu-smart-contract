@@ -5,6 +5,7 @@ contract SingleWriteBad {
     uint256[] private items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     uint256 sum;
 
+    // 75958 gas
     function loop() public {
         uint256 localLength = items.length;
 
@@ -18,6 +19,7 @@ contract SingleWriteGood {
     uint256[] private items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     uint256 sum;
 
+    // 69663 gas
     function loop() public {
         uint256[] memory localItems = items;
         uint256 localLength = localItems.length;

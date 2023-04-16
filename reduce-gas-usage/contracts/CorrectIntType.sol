@@ -2,6 +2,8 @@
 pragma solidity 0.8.18;
 
 contract CorrectIntTypeBad {
+
+    // 29779 gas
     function loop() public {
         uint16 i;
         do {
@@ -13,6 +15,8 @@ contract CorrectIntTypeBad {
 }
 
 contract CorrectIntTypeGood {
+
+    // 28579 gas
     function loop() public {
         uint256 i;
         do {
