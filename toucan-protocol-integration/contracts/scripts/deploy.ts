@@ -1,19 +1,16 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  // addresses taken from https://github.com/ToucanProtocol/toucan-sdk/blob/main/src/utils/addresses.ts
+  const OFFSET_HELPER = "0xAcf9FD890F06e6F200339193a64c0952a164Cb9d";
+  const POOL_TOKEN = "0x4c5f90C50Ca9F849bb75D93a393A4e1B6E68Accb";
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  const WallFactory = await ethers.getContractFactory("Wall");
+  const wall = await WallFactory.deploy(OFFSET_HELPER, POOL_TOKEN);
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  await wall.deployed();
 
-  await lock.deployed();
-
-  console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  console.log(`Wall deployed to ${wall.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
